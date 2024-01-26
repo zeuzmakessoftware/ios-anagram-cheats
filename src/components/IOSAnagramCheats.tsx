@@ -14,7 +14,7 @@ const IOSAnagramCheats = () => {
         try {
             const response = await fetch('/words.txt');
             const text = await response.text();
-            setWordList(text.split('\n').map(word => word.toLowerCase())); // Convert fetched word list to lowercase
+            setWordList(text.split('\n').map(word => word.toLowerCase()));
         } catch (error) {
             console.error('Failed to load word list:', error);
         }
@@ -36,7 +36,7 @@ const IOSAnagramCheats = () => {
     };
 
     const generateWords = () => {
-        const inputString = inputs.join('').toLowerCase(); // Convert input string to lowercase for processing
+        const inputString = inputs.join('').toLowerCase();
         if (inputString.length > 6) {
             alert("Please enter up to 6 letters.");
             return;
