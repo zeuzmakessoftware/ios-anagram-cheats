@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const IOSAnagramCheats = () => {
-    const [inputs, setInputs] = useState(Array(6).fill(''));
-    const [validWords, setValidWords] = useState([]);
-    const [wordList, setWordList] = useState([]);
-    const inputRefs = useRef([]);
+    const [inputs, setInputs] = useState<string[]>(Array(6).fill(''));
+    const [validWords, setValidWords] = useState<string[]>([]);
+    const [wordList, setWordList] = useState<string[]>([]);
+    const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
     useEffect(() => {
         loadWordList();
@@ -20,20 +20,18 @@ const IOSAnagramCheats = () => {
         }
     };
 
-    const handleInputChange = (index) => (event) => {
-        const newInputs = inputs.slice(); // Create a copy of the inputs array
-        newInputs[index] = event.target.value.slice(0, 1).toUpperCase(); // Display input in uppercase
+    const handleInputChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newInputs = inputs.slice();
+        newInputs[index] = event.target.value.slice(0, 1).toUpperCase();
         setInputs(newInputs);
-
-        // Automatically move to next input if the current one is filled
         if (event.target.value && index < 5) {
-            inputRefs.current[index + 1].focus();
+            inputRefs.current[index + 1]?.focus();
         }
     };
 
-    const handleKeyDown = (index) => (event) => {
-        if (event.key === 'Backspace' && index > 0 && !inputs[index]) {
-            inputRefs.current[index - 1].focus();
+    const handleKeyDown = (index: number) => (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Backspace' && index > 0 && !inputs[index] && inputRefs.current[index - 1]) {
+            inputRefs.current[index - 1]?.focus();
         }
     };
 
@@ -47,15 +45,15 @@ const IOSAnagramCheats = () => {
         validateWords(permutations);
     };
 
-    const getAllPermutations = (str) => {
-        let permutations = new Set();
+    const getAllPermutations = (str: string): string[] => {
+        let permutations = new Set<string>();
         for (let i = 3; i <= Math.min(6, str.length); i++) {
             getPermutations(str, i, '', permutations);
         }
         return Array.from(permutations);
     };
 
-    const getPermutations = (str, length, prefix = '', permutations) => {
+    const getPermutations = (str: string, length: number, prefix: string, permutations: Set<string>) => {
         if (length === 0) {
             permutations.add(prefix);
             return;
@@ -65,10 +63,10 @@ const IOSAnagramCheats = () => {
         }
     };
 
-    const validateWords = (permutations) => {
+    const validateWords = (permutations: string[]) => {
         const validWordsArray = permutations
             .filter(permutation => wordList.includes(permutation))
-            .sort((a, b) => b.length - a.length); // Sort words from longest to shortest
+            .sort((a, b) => b.length - a.length);
         setValidWords(validWordsArray);
     };
 
@@ -85,7 +83,6 @@ const IOSAnagramCheats = () => {
                             value={value}
                             onChange={handleInputChange(index)}
                             onKeyDown={handleKeyDown(index)}
-                            maxLength="1"
                             className="m-2 w-16 h-16 text-black text-5xl font-extrabold text-center border-2 bg-orange-200 border-white rounded"
                         />
                     ))}
