@@ -12,7 +12,7 @@ const IOSAnagramCheats = () => {
 
     const loadWordList = async () => {
         try {
-            const response = await fetch('https://raw.githubusercontent.com/dwyl/english-words/master/words.txt');
+            const response = await fetch('/words.txt');
             const text = await response.text();
             setWordList(text.split('\n').map(word => word.toLowerCase())); // Convert fetched word list to lowercase
         } catch (error) {
